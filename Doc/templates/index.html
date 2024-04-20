@@ -1,0 +1,202 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Home</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    
+    
+</head>
+
+<body>  
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-7 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="{% url 'index' %}" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag">Docblend</i></h3>
+                </a>
+                <div class="navbar-nav w-100">
+                    <a href="{% url 'convert_images' %}" class="nav-item nav-link "><i class="fa fa-images me-2"></i>Images to PDFs</a>
+                    <a href="{% url 'pdf_collector'%}" class="nav-item nav-link "><i class="fa fa-file-pdf me-2"></i>PDF Collector</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>counter</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="{% url 'image_counter'%}" class="dropdown-item">images counter</a>
+                            <a href="{% url  'pdf_counter' %}" class="dropdown-item ">PDFs pages counter</a>
+                        </div>
+                    </div>
+                    <a href="{% url 'rename_images_view'%}" class="nav-item nav-link "><i class="fa fa-edit me-2"></i>Rename Imgs</a>
+                    <a href="{% url 'add_logo'%}" class="nav-item nav-link "><i class="fa fa-file-pdf me-2"></i>Pdf on logo</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-1">
+                <a href="{% url 'index' %}" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <a id="Requirement" href="{% url 'requerments'%}" class="btn btn-primary ms-auto">Other Requirement</a>
+            </nav>
+            <!-- Navbar End -->
+            <!-- Start -->
+            
+         
+          <div class="container-fluid pt-4 px-4">
+              <div class="row g-4">
+                <div class="col-sm-12 col-md-6 col-xl-6">
+                    <div class="h-100 bg-light rounded p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h6 class="mb-0">To Do List</h6>
+                        </div>
+                        <div class="d-flex mb-2">
+                            <form method="POST" style="width: 100%;">
+                                {% csrf_token %}
+                                <input class="form-control " name="to_do" id="to_do" type="text"  required placeholder="Enter task">
+                                <br>
+                                <button type="submit" class="btn btn-primary ms-2">Add</button>
+                            </form>
+                        </div>
+                        {% if tasks %}
+                        {% for task in tasks %}
+                        <div class="d-flex align-items-center border-bottom py-2">
+                            {%if task.completed %}
+                            
+                            {%else%}
+                            <input class="form-check-input m-0" type="checkbox" data-task-id="{{ task.id }}">
+                            {% endif %}
+
+                            <div class="w-100 ms-3">
+                                {%if task.completed %}
+                                <div class="d-flex w-100 align-items-center justify-content-between">
+                                    <del><span id="task-{{ task.id }}">{{ task.description }}</span></del>
+                                    <a href="{% url 'to_do_delete' task.id %}" class="btn btn-sm"><i class="fa fa-times"></i></a>
+                                </div>
+                                {%else%}
+                                <div class="d-flex w-100 align-items-center justify-content-between">
+                                    <span id="task-{{ task.id }}">{{ task.description }}</span>
+                                    <a href="{% url 'to_do_delete' task.id %}" class="btn btn-sm"><i class="fa fa-times"></i></a>
+                                </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p>No tasks</p>
+                        {% endif %}
+                    </div>
+                </div>
+              
+
+            
+              <!-- Left Section - Small Cards -->
+          </div>
+      </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Template Javascript -->
+<script src="{% static 'js/main.js'%}"></script>
+<script>
+    $(document).ready(function() {
+        // Function to mark task as completed
+        function markTaskCompleted(taskId, checked) {
+            $.ajax({
+                url: '/mark-task-completed/',
+                type: 'POST',
+                data: {
+                    'task_id': taskId,
+                    'completed': checked,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (!response.success) {
+                        console.log('Error marking task as completed:', response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', error);
+                }
+            });
+        }
+        
+        // Event listener for checkbox change
+        $('.form-check-input').change(function() {
+            var taskId = $(this).data('task-id');
+            var checked = $(this).prop('checked');
+            var taskSpan = $('#task-' + taskId);
+            
+            // Toggle <del> tag based on checkbox state
+            if (checked) {
+                taskSpan.wrapInner('<del></del>');
+            } else {
+                taskSpan.find('del').contents().unwrap();
+            }
+            
+            // Mark task as completed
+            markTaskCompleted(taskId, checked);
+
+            $(this).toggle();
+        });
+        
+        // Load initial checkbox states from database on page load
+        $('.form-check-input').each(function() {
+            var taskId = $(this).data('task-id');
+            var taskSpan = $('#task-' + taskId);
+            var completed = taskSpan.data('completed');
+            
+            // Set checkbox state based on completion status
+            $(this).prop('checked', completed);
+            
+            // Apply <del> tag if task is completed
+            if (completed) {
+                taskSpan.wrapInner('<del></del>');
+            }
+            if (completed) {
+                $(this).hide();
+            }
+        });
+    });
+</script>
+</body>
+</html>

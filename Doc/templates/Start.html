@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intro Animation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comforter&display=swap">
+  <style>
+    :root {
+      --primary: #009CFF;
+      --light: #191C24;
+      --dark: #F3F6F9;
+      --screenCoeff: calc(1vw + 1vh);
+      --bgColor: var(--dark);
+      --fontColor: var(--light);
+      --shadowColor: 0 0 0.3em var(--light);
+      --glowColor: var(--primary);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Comforter", cursive;
+      background-color: var(--bgColor);
+      font-size: calc(var(--screenCoeff) * 7);
+      overflow: hidden;
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--fontColor);
+    }
+
+    #glowing_text {
+      text-wrap: nowrap;
+      text-overflow: clip;
+    }
+
+    #glowing_text {
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p id="glowing_text">#DocBleand</p>
+  </div>
+
+  <script>
+    const glowingText = (() => {
+      const textElement = document.getElementById('glowing_text');
+      let coloredText;
+      let index = 0;
+ 
+      const startGlowing = () => {
+        setInterval(() => {
+          const letters = textElement.textContent.split('');
+          if (letters[index] == ' ') {
+            index++;
+          }
+          letters[
+            index
+          ] = `<span style="color: var(--glowColor); text-shadow: var(--shadowColor);">${letters[index]}</span>`;
+          coloredText = letters.join('');
+          textElement.innerHTML = coloredText;
+          index = (index + 1) % letters.length;
+        }, 200);
+      };
+
+      return startGlowing;
+    })();
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        window.location.href = "{% url 'index'%}"; // Replace with your website URL
+      }, 2200); // 5 seconds delay
+      glowingText();
+    }, false);
+  </script>
+</body>
+</html>
